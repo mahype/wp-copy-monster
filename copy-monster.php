@@ -225,8 +225,15 @@ class copy_monster{
 	}
 
 	function update(){
-		$templates_old = get_site_option( 'defblog_templates' );
-		$settings_old = get_site_option( 'defblog_settings' );
+		$templates_old = get_site_option( 'copy_monster_templates' );
+		$settings_old = get_site_option( 'copy_monster_settings' );
+		
+		// If no values fount get it from Default Blog
+		if( '' == $templates_old )
+			$templates_old = get_site_option( 'defblog_templates' );
+		
+		if( '' == $settings_old )
+			$settings_old = get_site_option( 'defblog_settings' );
 		/*
 		echo '<br />Templates old<pre>';
 		print_r( $templates_old );

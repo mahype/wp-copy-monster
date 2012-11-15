@@ -3,10 +3,10 @@
  * Plugin functions
  */
 
-function add_dfb_plugin( $slug, $title, $function_admin, $function_copy = '', $function_save = '', $priority = 10 ){
-	$plugins = get_option( DFB_PLUGIN_OPTIONS );
+function add_cm_plugin( $slug, $title, $function_admin, $function_copy = '', $function_save = '', $priority = 10 ){
+	$plugins = get_option( CM_PLUGIN_OPTIONS );
 	
-	$plugin_slugs = get_dfb_plugin_slugs();
+	$plugin_slugs = get_cm_plugin_slugs();
 	
 	if( is_array( $plugin_slugs ) ):
 		// Deleting plugins with same slug, which have been added before
@@ -30,11 +30,11 @@ function add_dfb_plugin( $slug, $title, $function_admin, $function_copy = '', $f
 	
 	ksort( $plugins );
 	
-	update_option( DFB_PLUGIN_OPTIONS, $plugins );
+	update_option( CM_PLUGIN_OPTIONS, $plugins );
 }
 
-function get_dfb_plugins(){
-	$plugins = get_option( DFB_PLUGIN_OPTIONS );
+function get_cm_plugins(){
+	$plugins = get_option( CM_PLUGIN_OPTIONS );
 	
 	// Sorting Array because of priority numbers
 	if( is_array( $plugins ) )
@@ -54,8 +54,8 @@ function get_dfb_plugins(){
 	return $all_plugins;
 }
 
-function get_dfb_plugin_slugs(){
-	$plugins = get_dfb_plugins();
+function get_cm_plugin_slugs(){
+	$plugins = get_cm_plugins();
 	
 	$plugin_slugs = array();
 	
@@ -69,8 +69,8 @@ function get_dfb_plugin_slugs(){
 	return $plugin_slugs;
 }
 
-function get_dfb_plugin( $slug ){
-	$plugins = get_dfb_plugins();
+function get_cm_plugin( $slug ){
+	$plugins = get_cm_plugins();
 	
 	foreach( $plugins AS $plugin ):
 		if( $slug == $plugin[ 'slug' ] )

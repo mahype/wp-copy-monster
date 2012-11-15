@@ -1,9 +1,9 @@
 <?php
 
-add_dfb_plugin( 'blog_options', __( 'Blog Options', 'default-blog-options' ), 'default_blog_options_admin', 'default_blog_options_copy', 'default_blog_options_save', 35 );
+add_cm_plugin( 'blog_options', __( 'Blog Options', 'copy-monster-options' ), 'copy_monster_options_admin', 'copy_monster_options_copy', 'copy_monster_options_save', 35 );
 
-function default_blog_options_admin(){ 
-	global $wpdb, $default_blog_template;
+function copy_monster_options_admin(){ 
+	global $wpdb, $copy_monster_template;
 	
 	switch_to_blog( DFB_TEMPLATE_EDIT_BLOG_ID );
 	
@@ -21,15 +21,15 @@ function default_blog_options_admin(){
 	
 	$content.= '<thead>';
 		$content.= '<tr>';
-			$content.= '<th>' . __( 'Name', 'default-blog-options' ) . '</th>';	
-			$content.= '<th>' . __( 'Value', 'default-blog-options') .'</th>';
-			$content.= '<th>' . __( 'Copy', 'default-blog-options' ) . '</th>';
+			$content.= '<th>' . __( 'Name', 'copy-monster-options' ) . '</th>';	
+			$content.= '<th>' . __( 'Value', 'copy-monster-options') .'</th>';
+			$content.= '<th>' . __( 'Copy', 'copy-monster-options' ) . '</th>';
 	    $content.= '</tr>';
 	$content.= '</thead>';
 	
 	$content.= '<tbody>';
 	
-		$options_selected = $default_blog_template['options'];
+		$options_selected = $copy_monster_template['options'];
 		
 		foreach( (array) $options as $option) :
 			$option->option_name = esc_attr( $option->option_name );
@@ -41,12 +41,12 @@ function default_blog_options_admin(){
 					$checked = ' checked';
 			
 			$content.= '<tr>';
-				$content.= '<td><label for="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][options][]">' . $option->option_name . '</label></td>';
+				$content.= '<td><label for="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][options][]">' . $option->option_name . '</label></td>';
 				$content.= '<td><textarea disabled="disabled">' . $option->option_value . '</textarea></td>';
-				$content.= '<td><input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][options][]" value="' . $option->option_name . '" ' . $checked . ' /></td>';
+				$content.= '<td><input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][options][]" value="' . $option->option_name . '" ' . $checked . ' /></td>';
 			$content.= '<tr>';
 			
-			$content = apply_filters( 'default-blog-options-row', $content, $option->option_name );
+			$content = apply_filters( 'copy-monster-options-row', $content, $option->option_name );
 		
 		endforeach;
 		
@@ -54,19 +54,19 @@ function default_blog_options_admin(){
 	
 	$content.= '</table>';
 	
-	$content = apply_filters( 'default-blog-options-admin', $content );
+	$content = apply_filters( 'copy-monster-options-admin', $content );
 	
 	echo $content;
 	
-	do_action( 'default-blog-options-admin-bottom' );
+	do_action( 'copy-monster-options-admin-bottom' );
 	
 	restore_current_blog();
 }
 
-function default_blog_options_copy( $from_blog_id, $to_blog_id ){
-	global $wp_rewrite, $default_blog_template;
+function copy_monster_options_copy( $from_blog_id, $to_blog_id ){
+	global $wp_rewrite, $copy_monster_template;
 	
-	$options = $default_blog_template[ 'options' ];
+	$options = $copy_monster_template[ 'options' ];
 	
 	if( is_array( $options ) ):
 		foreach( $options AS $option ):
@@ -95,6 +95,6 @@ function default_blog_options_copy( $from_blog_id, $to_blog_id ){
 	endif;
 }
 
-function default_blog_options_save( $input ){
+function copy_monster_options_save( $input ){
 	return $input;
 }

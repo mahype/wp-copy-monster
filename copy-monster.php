@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Default Blog
-Plugin URI: http://wordpress.org/extend/plugins/default-blog-options/
-Description: Create new blogs with values like Posts, Pages, Theme settings, Blog options ... from a default blog made by you.
-Author: Sven Lehnert, Sven Wagener
+Plugin Name: Copy Monster
+Plugin URI: https://github.com/mahype/wp-copy-monster/
+Description: Copy your posts, pages and many other settings within a blog or to other blogs in a blog network.
+Author: Sven Wagener
 Author URI: http://www.rheinschmiede.de
-Version: 1.0 alpha
+Version: 0.1
 License: (GNU General Public License 3.0 (GPL) http://www.gnu.org/licenses/gpl.html)
 Copyright: Sven Wagener
 */
@@ -16,13 +16,13 @@ WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 ***********************************************************************/
 
-class default_blog{
+class copy_monster{
 	
 	var $template_options;
 	var $templates;
 	var $components;
 	
-	function default_blog(){
+	function copy_monster(){
 		$this->__construct();
 	}
 	function __construct(){
@@ -50,11 +50,11 @@ class default_blog{
 	}
 	
 	public function register_settings(){
-		register_setting( 'default-blog-config', DFB_OPTION_GROUP, array( $this, 'save' ) );
+		register_setting( 'copy-monster-config', CM_OPTION_GROUP, array( $this, 'save' ) );
 	}
 	
 	public function save( $input ){
-		$plugins = get_dfb_plugins();
+		$plugins = get_cm_plugins();
 		
 		if( !is_array( $plugins ) )
 			return FALSE;
@@ -68,7 +68,7 @@ class default_blog{
 		endforeach;
 		
 		// Merging old and new template values
-		$old_input = get_option( DFB_OPTION_GROUP );
+		$old_input = get_option( CM_OPTION_GROUP );
 		
 		if( !is_array( $input ) )
 			return FALSE;
@@ -85,19 +85,19 @@ class default_blog{
 	}
 
 	public function init_blog( $to_blog_id ){
-		$plugins = get_dfb_plugins();
+		$plugins = get_cm_plugins();
 		
 		foreach( $plugins AS $plugin ):
-			$this->copy_element( $plugin[ 'slug' ], DFB_TEMPLATE_BLOG_ID, $to_blog_id );
+			$this->copy_element( $plugin[ 'slug' ], CM_TEMPLATE_BLOG_ID, $to_blog_id );
 		endforeach;
 	}
 	
 	public function copy_element( $plugin_slug, $from_blog_id, $to_blog_id, $args = array() ){
 
-		if( !in_array( $plugin_slug, get_dfb_plugin_slugs() ) )
+		if( !in_array( $plugin_slug, get_cm_plugin_slugs() ) )
 			return FALSE;
 		
-		$plugin = get_dfb_plugin( $plugin_slug );
+		$plugin = get_cm_plugin( $plugin_slug );
 		
 		$function_copy = $plugin[ 'function_copy' ];
 		
@@ -111,35 +111,35 @@ class default_blog{
 	}
 	
 	public function includes(){
-		include_once( DFB_FOLDER . '/functions.php' ); // Functions
-		include_once( DFB_FOLDER . '/includes/tkf/loader.php' ); // Framework
+		include_once( CM_FOLDER . '/functions.php' ); // Functions
+		include_once( CM_FOLDER . '/includes/tkf/loader.php' ); // Framework
 	}
 	
 	public function load_textdomain(){
-		load_plugin_textdomain( 'default-blog-options', DFB_FOLDER . '/languages/' );
+		load_plugin_textdomain( 'copy-monster-options', CM_FOLDER . '/languages/' );
 	}
 	
 	function constants(){
-		define( 'DFB_FOLDER', 	$this->get_folder() );
-		define( 'DFB_URLPATH', $this->get_url_path() );
-		define( 'DFB_OPTION_GROUP', 'dfb-option-group' ); // Option group to save data
-		define( 'DFB_TEMPLATE_OPTIONS', 'dfb-template-options' ); // Option to save template data
-		define( 'DFB_PLUGIN_OPTIONS', 'dfb-plugin-options' ); // Option to save template data
+		define( 'CM_FOLDER', 	$this->get_folder() );
+		define( 'CM_URLPATH', $this->get_url_path() );
+		define( 'CM_OPTION_GROUP', 'cm-option-group' ); // Option group to save data
+		define( 'CM_TEMPLATE_OPTIONS', 'cm-template-options' ); // Option to save template data
+		define( 'CM_PLUGIN_OPTIONS', 'cm-plugin-options' ); // Option to save template data
 	}
 	
 	function globals(){
-		global $default_blog_template;
-		$default_blog_template = $this->templates[ DFB_TEMPLATE_EDIT_ID ] ;
+		global $copy_monster_template;
+		$copy_monster_template = $this->templates[ CM_EMPLATE_EDIT_ID ] ;
 		
 		//echo '<pre>';
-		//print_r( $default_blog_template );
+		//print_r( $copy_monster_template );
 		//echo '</pre>';
 	}
 	
 	function components(){
-		$components_folder = DFB_FOLDER . '/components';
+		$components_folder = CM_FOLDER . '/components';
 		
-		$this->components = apply_filters( 'default_blog_components', array( 
+		$this->components = apply_filters( 'copy_monster_components', array( 
 			'blog-template' =>  $components_folder . '/blog-template' , 
 			'posts' =>  $components_folder . '/posts' , 
 			'menus' =>  $components_folder . '/menus' , 
@@ -160,27 +160,27 @@ class default_blog{
 	}
 	
 	function admin_menu(){
-		add_submenu_page( 'sites.php', __( 'Default Blog', 'default-blog-options' ), __( 'Default Blog', 'default-blog-options' ), 'manage_options', 'defaultblog', array( $this, 'admin_page' ) );
+		add_submenu_page( 'sites.php', __( 'Copy Monster', 'copy-monster-options' ), __( 'Copy Monster', 'copy-monster-options' ), 'manage_options', 'defaultblog', array( $this, 'admin_page' ) );
 	}
 	
 	function admin_page(){
-		include_once( DFB_FOLDER . '/admin.php' );
+		include_once( CM_FOLDER . '/admin.php' );
 	}
 	
 	function admin_css(){
-		wp_register_style( 'default-blog-admin-css', DFB_URLPATH . '/admin.css' );
-		wp_enqueue_style( 'default-blog-admin-css' );
+		wp_register_style( 'copy-monster-admin-css', CM_URLPATH . '/admin.css' );
+		wp_enqueue_style( 'copy-monster-admin-css' );
 	}
 	
 	function admin_js(){
-		wp_register_script( 'default-blog-js', DFB_URLPATH . '/admin.js' ); // General Theme JS
-		wp_enqueue_script( 'default-blog-js' );	
+		wp_register_script( 'copy-monster-js', CM_URLPATH . '/admin.js' ); // General Theme JS
+		wp_enqueue_script( 'copy-monster-js' );	
 	}
 
 	public function admin_js_vars(){
 		$content = '<script type="text/javascript">' . chr(13);
 		$content.= '// Text strings for default Blog' . chr(13);
-		$content.= 'var dfb_txt_delete_template_question = "' . __( 'Do you really want to delete this template?', 'default-blog-options' ) . '";' . chr(13);
+		$content.= 'var cm_txt_delete_template_question = "' . __( 'Do you really want to delete this template?', 'copy-monster-options' ) . '";' . chr(13);
 		$content.= '</script>' . chr(13);
 		echo $content;
 	}
@@ -198,11 +198,11 @@ class default_blog{
 		$this->update();
 		
 		// Try to get old values
-		if( '' == get_option( DFB_OPTION_GROUP ) )
+		if( '' == get_option( CM_OPTION_GROUP ) )
 			$this->update();
 			
-		$this->templates = get_option( DFB_OPTION_GROUP );
-		$this->template_options = get_option( DFB_TEMPLATE_OPTIONS );
+		$this->templates = get_option( CM_OPTION_GROUP );
+		$this->template_options = get_option( CM_TEMPLATE_OPTIONS );
 		/*
 		echo '<br />Templates:<pre>';
 		print_r( $this->templates );
@@ -214,14 +214,14 @@ class default_blog{
 		 * */
 		
 		if( is_array( $this->templates ) )
-			define( 'DFB_TEMPLATE_ID', $this->templates[ 'dfb_template_id' ] );
-		if( is_array( $this->template_options[ DFB_TEMPLATE_ID ] ) )
-			define( 'DFB_TEMPLATE_BLOG_ID', $this->template_options[ DFB_TEMPLATE_ID ][ 'blog_id' ] );
+			define( 'CM_TEMPLATE_ID', $this->templates[ 'cm_template_id' ] );
+		if( is_array( $this->template_options[ CM_TEMPLATE_ID ] ) )
+			define( 'CM_TEMPLATE_BLOG_ID', $this->template_options[ CM_TEMPLATE_ID ][ 'blog_id' ] );
 		
 		if( is_array( $this->templates ) )
-			define( 'DFB_TEMPLATE_EDIT_ID', $this->templates[ 'dfb_template_edit_id' ] );
-		if( is_array( $this->template_options[ DFB_TEMPLATE_EDIT_ID ] ) )
-			define( 'DFB_TEMPLATE_EDIT_BLOG_ID', $this->template_options[ DFB_TEMPLATE_EDIT_ID ][ 'blog_id' ]);
+			define( 'CM_EMPLATE_EDIT_ID', $this->templates[ 'cm_template_edit_id' ] );
+		if( is_array( $this->template_options[ CM_EMPLATE_EDIT_ID ] ) )
+			define( 'DFB_TEMPLATE_EDIT_BLOG_ID', $this->template_options[ CM_EMPLATE_EDIT_ID ][ 'blog_id' ]);
 	}
 
 	function update(){
@@ -260,19 +260,19 @@ class default_blog{
 		$new_template_options[] = array(
 			'blog_id' => $settings_old['init'],
 			'template_id' => 0,
-			'template_name' => __( 'Autogenerated from old version.', 'default-blog-options' )
+			'template_name' => __( 'Autogenerated from old version.', 'copy-monster-options' )
 		); 
 	}
 	
 	/**
 	* Getting URL Path
 	*
-	* @package Default Blog
+	* @package Copy Monster
 	* @since 1.0
 	*
 	*/
 	private function get_url_path(){
-		$sub_path = substr( DFB_FOLDER, strlen( ABSPATH ), ( strlen( DFB_FOLDER ) ) );
+		$sub_path = substr( CM_FOLDER, strlen( ABSPATH ), ( strlen( CM_FOLDER ) ) );
 		$script_url = get_bloginfo( 'wpurl' ) . '/' . $sub_path;
 		return $script_url;
 	}
@@ -280,7 +280,7 @@ class default_blog{
 	/**
 	* Getting URL Path of theme
 	*
-	* @package Default Blog
+	* @package Copy Monster
 	* @since 1.0
 	*
 	*/
@@ -291,4 +291,4 @@ class default_blog{
 	}
 }
 
-$default_blog = new default_blog();
+$copy_monster = new copy_monster();

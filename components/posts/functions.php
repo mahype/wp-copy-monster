@@ -1,15 +1,15 @@
 <?php
 
-add_dfb_plugin( 'posts', __( 'Post Types', 'default-blog-options' ), 'default_blog_posts_admin', 'default_blog_posts_copy', 'default_blog_posts_save', 5  );
+add_cm_plugin( 'posts', __( 'Post Types', 'copy-monster-options' ), 'copy_monster_posts_admin', 'copy_monster_posts_copy', 'copy_monster_posts_save', 5  );
 
-function default_blog_posts_admin(){ 
-	global $wpdb, $default_blog_template;
+function copy_monster_posts_admin(){ 
+	global $wpdb, $copy_monster_template;
 	
 	switch_to_blog( DFB_TEMPLATE_EDIT_BLOG_ID );
 	
-	$post_types = apply_filters( 'default_blog_post_types', default_blog_get_post_types_db( get_post_types( '', 'object' ) ) );
+	$post_types = apply_filters( 'copy_monster_post_types', copy_monster_get_post_types_db( get_post_types( '', 'object' ) ) );
 	
-	// $post_types = apply_filters( 'default_blog_post_types',get_post_types( '', 'object' ) );
+	// $post_types = apply_filters( 'copy_monster_post_types',get_post_types( '', 'object' ) );
 	
 	$elements = array();
 	
@@ -22,32 +22,32 @@ function default_blog_posts_admin(){
 		
 		$content.= '<thead>';
 			$content.= '<tr>';
-				$content.= '<th>' . __( 'Title', 'default-blog-options' ) . '</th>';	
-				$content.= '<th>' . __( 'Date', 'default-blog-options') .'</th>';
-				$content.= '<th>' . __( 'Status', 'default-blog-options') .'</th>';
-				$content.= '<th>' . __( 'Copy', 'default-blog-options' ) . '</th>';
-				$content.= '<th>' . __( 'Attachments', 'default-blog-options' ) . '</th>';
-				$content.= '<th>' . __( 'Meta', 'default-blog-options' ) . 	'</th>';
+				$content.= '<th>' . __( 'Title', 'copy-monster-options' ) . '</th>';	
+				$content.= '<th>' . __( 'Date', 'copy-monster-options') .'</th>';
+				$content.= '<th>' . __( 'Status', 'copy-monster-options') .'</th>';
+				$content.= '<th>' . __( 'Copy', 'copy-monster-options' ) . '</th>';
+				$content.= '<th>' . __( 'Attachments', 'copy-monster-options' ) . '</th>';
+				$content.= '<th>' . __( 'Meta', 'copy-monster-options' ) . 	'</th>';
 				
 				if( post_type_supports( $post_type->name, 'comments' ) )
-					$content.= '<th>' . __( 'Comments', 'default-blog-options' ) . '</th>';	       
+					$content.= '<th>' . __( 'Comments', 'copy-monster-options' ) . '</th>';	       
 	        
 	        $content.= '</tr>';
 		$content.= '</thead>';
 		
-		$checked_posts = $default_blog_template[ $post_type->name ];
-		$checked_posts_attachments = $default_blog_template[ $post_type->name . '_attachments' ];
-		$checked_posts_meta = $default_blog_template[ $post_type->name . '_meta' ];
+		$checked_posts = $copy_monster_template[ $post_type->name ];
+		$checked_posts_attachments = $copy_monster_template[ $post_type->name . '_attachments' ];
+		$checked_posts_meta = $copy_monster_template[ $post_type->name . '_meta' ];
 		
 		if( post_type_supports( $post_type->name, 'comments' ) )
-			$checked_posts_comments = $default_blog_template[ $post_type->name . '_comments' ];
+			$checked_posts_comments = $copy_monster_template[ $post_type->name . '_comments' ];
 		
 		// Getting older version values 
 		if( '' == $checked_posts ):
 			if( 'post' == $post_type->name )
-				if( is_array( $default_blog_template[ 'posts' ] ) ) $checked_posts = $default_blog_template[ 'posts' ];
+				if( is_array( $copy_monster_template[ 'posts' ] ) ) $checked_posts = $copy_monster_template[ 'posts' ];
 			if( 'page' == $post_type->name )
-				if( is_array( $default_blog_template[ 'pages' ] ) ) $checked_posts = $default_blog_template[ 'pages' ];
+				if( is_array( $copy_monster_template[ 'pages' ] ) ) $checked_posts = $copy_monster_template[ 'pages' ];
 		endif;
 			
 		$content.= '<tbody>';
@@ -91,31 +91,31 @@ function default_blog_posts_admin(){
 				
 				switch( $post->post_status ){
 					case 'new':
-						$status = _x( 'New', 'Post status', 'default-blog-options' );
+						$status = _x( 'New', 'Post status', 'copy-monster-options' );
 						break;
 					case 'publish':
-						$status = _x( 'Published', 'Post status', 'default-blog-options' );
+						$status = _x( 'Published', 'Post status', 'copy-monster-options' );
 						break;
 					case 'pending':
-						$status = _x( 'Pending', 'Post status', 'default-blog-options' );
+						$status = _x( 'Pending', 'Post status', 'copy-monster-options' );
 						break;
 					case 'draft':
-						$status = _x( 'Draft', 'Post status', 'default-blog-options' );
+						$status = _x( 'Draft', 'Post status', 'copy-monster-options' );
 						break;
 					case 'auto-draft':
-						$status = _x( 'Auto Draft', 'Post status', 'default-blog-options' );
+						$status = _x( 'Auto Draft', 'Post status', 'copy-monster-options' );
 						break;
 					case 'future':
-						$status = _x( 'Future', 'Post status', 'default-blog-options' );
+						$status = _x( 'Future', 'Post status', 'copy-monster-options' );
 						break;
 					case 'private':
-						$status = _x( 'Private', 'Post status', 'default-blog-options' );
+						$status = _x( 'Private', 'Post status', 'copy-monster-options' );
 						break;
 					case 'inherit':
-						$status = _x( 'Inherit', 'Post status', 'default-blog-options' );
+						$status = _x( 'Inherit', 'Post status', 'copy-monster-options' );
 						break;
 					case 'trash':
-						$status = _x( 'Trash', 'Post status', 'default-blog-options' );
+						$status = _x( 'Trash', 'Post status', 'copy-monster-options' );
 						break;
 				}
 				
@@ -134,20 +134,20 @@ function default_blog_posts_admin(){
 				$content.= '</td>';
 				
 				$content.= '<td>';
-				$content.= '<input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name . '][]" value="' . get_the_ID() . '"' . $post_checked . ' />';
+				$content.= '<input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name . '][]" value="' . get_the_ID() . '"' . $post_checked . ' />';
 				$content.= '</td>';
 				
 				$content.= '<td>';
-				$content.= '<input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name . '_attachments][]" value="' . get_the_ID() . '"' . $post_attachments_checked . ' />';
+				$content.= '<input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name . '_attachments][]" value="' . get_the_ID() . '"' . $post_attachments_checked . ' />';
 				$content.= '</td>';
 				
 				$content.= '<td>';
-				$content.= '<input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name . '_meta][]" value="' . get_the_ID() . '"' . $post_meta_checked . ' />';
+				$content.= '<input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name . '_meta][]" value="' . get_the_ID() . '"' . $post_meta_checked . ' />';
 				$content.= '</td>';
 				
 				if( post_type_supports( $post_type->name, 'comments' ) ):
 					$content.= '<td>';
-					$content.= '<input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name . '_comments][]" value="' . get_the_ID() . '"' . $post_comments_checked . ' /> <span class="comment-count">' . get_comments_number() . '</span>';
+					$content.= '<input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name . '_comments][]" value="' . get_the_ID() . '"' . $post_comments_checked . ' /> <span class="comment-count">' . get_comments_number() . '</span>';
 					$content.= '</td>';
 				endif;
 				
@@ -159,17 +159,17 @@ function default_blog_posts_admin(){
 		
 		// Delete automatic entries
 		if( $post_type->name == 'post' || $post_type->name == 'page' ):
-			if( $default_blog_template[ $post_type->name . '_delete_existing' ] )
+			if( $copy_monster_template[ $post_type->name . '_delete_existing' ] )
 				$post_type_delete_existing_checked = ' checked="checked"';
 			
-			$content.= '<p><input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name . '_delete_existing]" value="true"' . $post_type_delete_existing_checked . ' /> ';
-			$content.=  __( 'Delete automatic generated WordPress entries.', 'default_blog_options' ) . '</p>';
+			$content.= '<p><input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name . '_delete_existing]" value="true"' . $post_type_delete_existing_checked . ' /> ';
+			$content.=  __( 'Delete automatic generated WordPress entries.', 'copy_monster_options' ) . '</p>';
 			
 		endif;
 		
-		// default_blog_get_post_type_taxonomies_db( $post_type->name );
+		// copy_monster_get_post_type_taxonomies_db( $post_type->name );
 		
-		$taxonomies = default_blog_get_taxonomies_db( $post_type->name );
+		$taxonomies = copy_monster_get_taxonomies_db( $post_type->name );
 		
 		// $taxonomies = get_taxonomies( array( 'object_type' => array( $post_type->name ) ), 'objects' );
 		
@@ -179,7 +179,7 @@ function default_blog_posts_admin(){
 				
 				// $terms = get_terms( $taxonomy->name, array( 'hide_empty' => FALSE ) );
 				
-				$terms = default_blog_get_terms_db( $taxonomy->name );
+				$terms = copy_monster_get_terms_db( $taxonomy->name );
 				
 				$content.= '<h3>' . $taxonomy->labels->name . '</h3>';
 				
@@ -189,8 +189,8 @@ function default_blog_posts_admin(){
 					
 					$content.= '<thead>';
 						$content.= '<tr>';
-							$content.= '<th>' . __( 'Title', 'default-blog-options' ) . '</th>';	
-							$content.= '<th>' . __( 'Copy Term', 'default-blog-options' ) . '</th>';
+							$content.= '<th>' . __( 'Title', 'copy-monster-options' ) . '</th>';	
+							$content.= '<th>' . __( 'Copy Term', 'copy-monster-options' ) . '</th>';
 				        $content.= '</tr>';
 					$content.= '</thead>';
 					
@@ -198,13 +198,13 @@ function default_blog_posts_admin(){
 					
 					foreach( $terms AS $term ):
 						$term_checked = '';
-						if( is_array( $default_blog_template[ $post_type->name . '_taxonomies' ][ $taxonomy->name ] ) )
-							if( in_array( $term->term_id, $default_blog_template[ $post_type->name . '_taxonomies' ][ $taxonomy->name ] ) )
+						if( is_array( $copy_monster_template[ $post_type->name . '_taxonomies' ][ $taxonomy->name ] ) )
+							if( in_array( $term->term_id, $copy_monster_template[ $post_type->name . '_taxonomies' ][ $taxonomy->name ] ) )
 								$term_checked = ' checked="checked"';
 						
 						$content.= '<tr>';
 							$content.= '<td>' . $term->name . '</td>';	
-							$content.= '<td><input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][' . $post_type->name. '_taxonomies][' . $taxonomy->name  . '][]" value="' . $term->term_id . '"' . $term_checked . ' />';
+							$content.= '<td><input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][' . $post_type->name. '_taxonomies][' . $taxonomy->name  . '][]" value="' . $term->term_id . '"' . $term_checked . ' />';
 				        $content.= '</tr>';
 					endforeach;
 					
@@ -213,13 +213,13 @@ function default_blog_posts_admin(){
 					$content.= '</table>';
 				
 				else:
-					$content.= '<p>' . __( 'No entry found.	', 'default-blog-options' ) . '</p>';
+					$content.= '<p>' . __( 'No entry found.	', 'copy-monster-options' ) . '</p>';
 				endif;
 				
 			endforeach;
 		endif;
 		
-		$content = apply_filters( 'default-blog-posts-'. $post_type->name, $content );
+		$content = apply_filters( 'copy-monster-posts-'. $post_type->name, $content );
 		
 		$elements[] = array(
 			'id' => sanitize_title( $post_type->name ),
@@ -228,25 +228,25 @@ function default_blog_posts_admin(){
 		);		
 	endforeach;
 		
-	$content = tk_tabs( 'default_blog_post_tabs', $elements, 'html' );
+	$content = tk_tabs( 'copy_monster_post_tabs', $elements, 'html' );
 	
-	$content = apply_filters( 'default-blog-posts-admin', $content );
+	$content = apply_filters( 'copy-monster-posts-admin', $content );
 	
 	echo $content;
 	
-	do_action( 'default-blog-posts-admin-bottom' );
+	do_action( 'copy-monster-posts-admin-bottom' );
 	
 	restore_current_blog();
 	
 }
 
-function default_blog_posts_copy( $from_blog_id, $to_blog_id, $args = array() ){
-	global $default_blog_template;
+function copy_monster_posts_copy( $from_blog_id, $to_blog_id, $args = array() ){
+	global $copy_monster_template;
 	
 	// Setting up Post Types
 	$defaults = array(
-		'post_types' => apply_filters( 'default_blog_post_types', default_blog_get_post_types( get_post_types( '', 'object' ) ) ),
-		'template_id' => DFB_TEMPLATE_ID
+		'post_types' => apply_filters( 'copy_monster_post_types', copy_monster_get_post_types( get_post_types( '', 'object' ) ) ),
+		'template_id' => CM_TEMPLATE_ID
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -257,9 +257,9 @@ function default_blog_posts_copy( $from_blog_id, $to_blog_id, $args = array() ){
 		
 		// Copy Taxonomies
 		$taxonomies = get_taxonomies( array( 'object_type' => array( $post_type ) ), 'objects' );
-		$taxonomy_termlist = default_blog_copy_taxonomies( $post_type, $from_blog_id, $to_blog_id );
+		$taxonomy_termlist = copy_monster_copy_taxonomies( $post_type, $from_blog_id, $to_blog_id );
 		
-		if( $default_blog_template[ $post_type . '_delete_existing' ] ):
+		if( $copy_monster_template[ $post_type . '_delete_existing' ] ):
 			switch_to_blog( $to_blog_id );
 			
 			$args = array(
@@ -279,7 +279,7 @@ function default_blog_posts_copy( $from_blog_id, $to_blog_id, $args = array() ){
 		$args = array(
 			'post_type' => $post_type,
 			'posts_per_page' => -1, // Show all posts
-			'post__in' => $default_blog_template[ $post_type ] // Only taking selected posts
+			'post__in' => $copy_monster_template[ $post_type ] // Only taking selected posts
 		);
 		
 		// Getting Posts from Soiurce Blog
@@ -293,31 +293,31 @@ function default_blog_posts_copy( $from_blog_id, $to_blog_id, $args = array() ){
 		
 			// Checking if comments have to be copied too
 			$copy_attachments = FALSE;
-			if ( is_array( $default_blog_template[ $post_type . '_attachments' ] ) )
-				if( in_array( $post->ID, $default_blog_template[ $post_type . '_attachments' ] ) )
+			if ( is_array( $copy_monster_template[ $post_type . '_attachments' ] ) )
+				if( in_array( $post->ID, $copy_monster_template[ $post_type . '_attachments' ] ) )
 					$copy_attachments = TRUE;
 			
 			// Checking if comments have to be copied too
 			$copy_meta = FALSE;
-			if ( is_array( $default_blog_template[ $post_type . '_meta' ] ) )
-				if( in_array( $post->ID, $default_blog_template[ $post_type . '_meta' ] ) )
+			if ( is_array( $copy_monster_template[ $post_type . '_meta' ] ) )
+				if( in_array( $post->ID, $copy_monster_template[ $post_type . '_meta' ] ) )
 					$copy_meta = TRUE;
 				
 			// Checking if comments have to be copied too
 			$copy_comments = FALSE;
-			if ( is_array( $default_blog_template[ $post_type . '_comments' ] ) )
-				if( in_array( $post->ID, $default_blog_template[ $post_type . '_comments' ] ) )
+			if ( is_array( $copy_monster_template[ $post_type . '_comments' ] ) )
+				if( in_array( $post->ID, $copy_monster_template[ $post_type . '_comments' ] ) )
 					$copy_comments = TRUE;
 			
 			// Copy post
-			default_blog_copy_post( $post->ID, $from_blog_id, $to_blog_id, array( 'copy_attachments' => $copy_attachments, 'copy_comments' => $copy_comments, 'copy_meta' => $copy_meta, 'taxonomy_termlist' => $taxonomy_termlist ) );
+			copy_monster_copy_post( $post->ID, $from_blog_id, $to_blog_id, array( 'copy_attachments' => $copy_attachments, 'copy_comments' => $copy_comments, 'copy_meta' => $copy_meta, 'taxonomy_termlist' => $taxonomy_termlist ) );
 		endwhile;
 		
 	endforeach;
 }
 
-function default_blog_copy_post( $post_id, $from_blog_id, $to_blog_id, $args = array() ){
-	global $default_blog_post_relations;
+function copy_monster_copy_post( $post_id, $from_blog_id, $to_blog_id, $args = array() ){
+	global $copy_monster_post_relations;
 	
 	// Setting Arguments
 	$defaults = array(
@@ -343,7 +343,7 @@ function default_blog_copy_post( $post_id, $from_blog_id, $to_blog_id, $args = a
 	unset( $post[ 'ID' ] ); // Deleting ID for adding new post
 	$new_post_id = wp_insert_post( $post );
 	
-	$default_blog_post_relations[ $post_id ] = $new_post_id;
+	$copy_monster_post_relations[ $post_id ] = $new_post_id;
 	
 	if( $new_post_id == 0 )
 		return FALSE;
@@ -375,21 +375,21 @@ function default_blog_copy_post( $post_id, $from_blog_id, $to_blog_id, $args = a
 	
 	// Copy Attachments
 	if( $copy_attachments )
-		default_blog_copy_attachments( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
+		copy_monster_copy_attachments( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
 
 	// Copy Comments
 	if( $copy_comments )
-		default_blog_copy_comments( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
+		copy_monster_copy_comments( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
 	
 	// Copy Meta Data	
 	if( $copy_meta )
-		default_blog_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
+		copy_monster_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog_id );
 	
 	return $new_post_id;
 }
 
-function default_blog_copy_attachments( $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
-	global $default_blog_post_attachment_relations;
+function copy_monster_copy_attachments( $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
+	global $copy_monster_post_attachment_relations;
 	
 	$args = array(
 		'post_type' => 'attachment',
@@ -431,14 +431,14 @@ function default_blog_copy_attachments( $post_id, $new_post_id, $from_blog_id, $
 			
 			$new_attachment_id = wp_insert_attachment( $attachment, $filename, $new_post_id ); // Inserting Attachments
 			$new_attachment_url = wp_get_attachment_url( $new_attachment_id );
-			default_blog_copy_meta( $attachment_id, $new_attachment_id, $from_blog_id, $to_blog_id ); // Copy Meta data
+			copy_monster_copy_meta( $attachment_id, $new_attachment_id, $from_blog_id, $to_blog_id ); // Copy Meta data
 			
-			$default_blog_post_attachment_relations[ $attachment_id ] = $new_attachment_id;
+			$copy_monster_post_attachment_relations[ $attachment_id ] = $new_attachment_id;
 			
 			// Copy files
 			if( file_exists( $filepath ) )
 				if( !copy( $filepath , $new_filepath ) )
-					wp_die( __( 'Could not copy files from Template. Please deselect to copy attachements or contact your Administrator and try again.', 'default-blog-options' ) );
+					wp_die( __( 'Could not copy files from Template. Please deselect to copy attachements or contact your Administrator and try again.', 'copy-monster-options' ) );
 			
 			// Copy different image sizes
 			$attachment_images = unserialize( $attachment_meta[ '_wp_attachment_metadata' ][ 0 ] ) ;
@@ -464,7 +464,7 @@ function default_blog_copy_attachments( $post_id, $new_post_id, $from_blog_id, $
 					// Copy file
 					if( file_exists( $image_filepath ) ):
 						if( !copy( $image_filepath , $new_image_filepath ) ):
-							wp_die( __( 'Could not copy files from Template. Please deselect to copy attachements or contact your Administrator and try again.', 'default-blog-options' ) );
+							wp_die( __( 'Could not copy files from Template. Please deselect to copy attachements or contact your Administrator and try again.', 'copy-monster-options' ) );
 						endif;
 					endif;
 						
@@ -499,7 +499,7 @@ function default_blog_copy_attachments( $post_id, $new_post_id, $from_blog_id, $
 	endif;
 }
 
-function default_blog_copy_comments(  $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
+function copy_monster_copy_comments(  $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
 	// Getting Comments
 	$args = array(
 		'post_id' => $post_id
@@ -521,8 +521,8 @@ function default_blog_copy_comments(  $post_id, $new_post_id, $from_blog_id, $to
 	restore_current_blog();
 }
 
-function default_blog_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
-	global $default_blog_post_attachment_relations;
+function copy_monster_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog_id ){
+	global $copy_monster_post_attachment_relations;
 	
 	switch_to_blog( $from_blog_id );
 	$custom_fields = get_post_custom( $post_id );
@@ -534,7 +534,7 @@ function default_blog_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog
 			
 			// Rewriting Thumbnail ID
 			if( '_thumbnail_id' ==  $custom_field_key )
-				$meta_value = $default_blog_post_attachment_relations[ $meta_value ];
+				$meta_value = $copy_monster_post_attachment_relations[ $meta_value ];
 			
 			add_post_meta( $new_post_id, $custom_field_key, $meta_value );
 		endforeach;
@@ -542,25 +542,25 @@ function default_blog_copy_meta( $post_id, $new_post_id, $from_blog_id, $to_blog
 	restore_current_blog();
 }
 
-function default_blog_copy_taxonomies( $post_type, $from_blog_id, $to_blog_id ){
+function copy_monster_copy_taxonomies( $post_type, $from_blog_id, $to_blog_id ){
 	switch_to_blog( $from_blog_id );
 	$taxonomies = get_taxonomies( array( 'object_type' => array( $post_type ) ), 'objects' );
 	restore_current_blog();
 	
 	// Taxonomies
 	foreach( $taxonomies AS $taxonomy ):
-		$new_termlist[ $taxonomy->name ] = default_blog_copy_taxonomy( $taxonomy->name, $post_type, $from_blog_id, $to_blog_id );
+		$new_termlist[ $taxonomy->name ] = copy_monster_copy_taxonomy( $taxonomy->name, $post_type, $from_blog_id, $to_blog_id );
 	endforeach;
 	
 	return $new_termlist;
 }
 
-function default_blog_copy_taxonomy( $taxonomy_name, $post_type, $from_blog_id, $to_blog_id, $args = array() ){
-	global $default_blog_template;
+function copy_monster_copy_taxonomy( $taxonomy_name, $post_type, $from_blog_id, $to_blog_id, $args = array() ){
+	global $copy_monster_template;
 	
 	// Setting Arguments
 	$defaults = array(
-		'term_ids' => $default_blog_template[ $post_type . '_taxonomies' ][ $taxonomy_name ]
+		'term_ids' => $copy_monster_template[ $post_type . '_taxonomies' ][ $taxonomy_name ]
 	);
 	
 	$args = wp_parse_args( $args, $defaults );
@@ -574,7 +574,7 @@ function default_blog_copy_taxonomy( $taxonomy_name, $post_type, $from_blog_id, 
 		foreach( $terms AS $term ):
 			if( is_array( $term_ids ) )
 				if( in_array( $term->term_id, $term_ids ) ):
-					$new_terms[ $term->term_id ] = default_blog_copy_term( $term->term_id, $taxonomy_name, $from_blog_id, $to_blog_id );
+					$new_terms[ $term->term_id ] = copy_monster_copy_term( $term->term_id, $taxonomy_name, $from_blog_id, $to_blog_id );
 				endif;
 		endforeach;
 	endif;
@@ -582,8 +582,8 @@ function default_blog_copy_taxonomy( $taxonomy_name, $post_type, $from_blog_id, 
 	return $new_terms; 
 }
 
-function default_blog_copy_term( $term_id, $taxonomy_name, $from_blog_id, $to_blog_id ){
-	global $default_blog_term_relations;
+function copy_monster_copy_term( $term_id, $taxonomy_name, $from_blog_id, $to_blog_id ){
+	global $copy_monster_term_relations;
 	
 	switch_to_blog( $from_blog_id );
 	$term = (array) get_term_by( 'id', $term_id, $taxonomy_name );
@@ -598,27 +598,27 @@ function default_blog_copy_term( $term_id, $taxonomy_name, $from_blog_id, $to_bl
 	if( is_object( $new_term ) )
 		return FALSE;
 	
-	$default_blog_term_relations[ $term_id ] = $new_term[ 'term_id' ];
+	$copy_monster_term_relations[ $term_id ] = $new_term[ 'term_id' ];
 	
 	return $new_term;
 }
 
-function default_blog_posts_ignore( $post_types ){
+function copy_monster_posts_ignore( $post_types ){
 	unset( $post_types[ 'attachment' ] );
 	unset( $post_types[ 'revision' ] );
 	unset( $post_types[ 'nav_menu_item' ] );
 	
 	return $post_types;
 }
-add_filter( 'default_blog_post_types', 'default_blog_posts_ignore' );
+add_filter( 'copy_monster_post_types', 'copy_monster_posts_ignore' );
 
-function default_blog_posts_save( $input ){
+function copy_monster_posts_save( $input ){
 	return $input;
 }
 /*
  * Getting all used Custom Post Types from existing blog
  */
-function default_blog_get_post_types_db( $wp_post_types_array = FALSE ){
+function copy_monster_get_post_types_db( $wp_post_types_array = FALSE ){
 	global $wpdb;
 	
 	$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT DISTINCT post_type FROM ' . $wpdb->prefix . 'posts' ) );
@@ -641,7 +641,7 @@ function default_blog_get_post_types_db( $wp_post_types_array = FALSE ){
 /*
  * Getting all used Custom Post Types from existing blog
  */
-function default_blog_get_taxonomies_db( $post_type ){
+function copy_monster_get_taxonomies_db( $post_type ){
 	global $wpdb;
 	
 	// Exit id post type is empty
@@ -707,7 +707,7 @@ function default_blog_get_taxonomies_db( $post_type ){
 	return $taxonomies;
 }
 
-function default_blog_get_terms_db( $taxonomy ){
+function copy_monster_get_terms_db( $taxonomy ){
 	global $wpdb;
 	
 	// Exit if taxonomy is empty

@@ -1,9 +1,9 @@
 <?php
 
-add_dfb_plugin( 'links', __( 'Links', 'default-blog-options' ), 'default_blog_links_admin', 'default_blog_links_copy', 'default_blog_links_save', 20 );
+add_cm_plugin( 'links', __( 'Links', 'copy-monster-options' ), 'copy_monster_links_admin', 'copy_monster_links_copy', 'copy_monster_links_save', 20 );
 
-function default_blog_links_admin(){ 
-	global $wpdb, $default_blog_template;
+function copy_monster_links_admin(){ 
+	global $wpdb, $copy_monster_template;
 	
 	switch_to_blog( DFB_TEMPLATE_EDIT_BLOG_ID );
 	
@@ -18,16 +18,16 @@ function default_blog_links_admin(){
 	
 	$content.= '<thead>';
 		$content.= '<tr>';
-			$content.= '<th>' . __( 'Name', 'default-blog-options' ) . '</th>';	
-			$content.= '<th>' . __( 'URL', 'default-blog-options') .'</th>';
-			$content.= '<th>' . __( 'Copy', 'default-blog-options' ) . '</th>';
+			$content.= '<th>' . __( 'Name', 'copy-monster-options' ) . '</th>';	
+			$content.= '<th>' . __( 'URL', 'copy-monster-options') .'</th>';
+			$content.= '<th>' . __( 'Copy', 'copy-monster-options' ) . '</th>';
 			
         $content.= '</tr>';
 	$content.= '</thead>';
 	
 	$content.= '<tbody>';
 	
-	$checked_links = $default_blog_template[ 'links' ];
+	$checked_links = $copy_monster_template[ 'links' ];
 	
 	foreach( $bookmarks AS $bookmark ):
 		$checked = '';
@@ -40,35 +40,35 @@ function default_blog_links_admin(){
 		$content.= '<tr>';
 			$content.= '<td>' . $bookmark->link_name . '</th>';	
 			$content.= '<td>' . $bookmark->link_url . '</td>';
-			$content.= '<td><input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][links][]" value="' . $bookmark->link_id . '"' . $checked . ' ></td>';
+			$content.= '<td><input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][links][]" value="' . $bookmark->link_id . '"' . $checked . ' ></td>';
         $content.= '</tr>';
 	endforeach;
 		
 	$content.= '</tbody>';
 	$content.= '</table>';
 	
-	if( $default_blog_template[ 'links_delete_existing' ] )
+	if( $copy_monster_template[ 'links_delete_existing' ] )
 		$links_delete_existing_checked = ' checked="checked"';
 		
-		$content.= '<p><input type="checkbox" name="' . DFB_OPTION_GROUP . '[' . DFB_TEMPLATE_EDIT_ID . '][links_delete_existing]" value="true"' . $links_delete_existing_checked . ' /> ';
-		$content.=  __( 'Delete automatic generated WordPress entries.', 'default_blog_options' ) . '</p>';
+		$content.= '<p><input type="checkbox" name="' . CM_OPTION_GROUP . '[' . CM_EMPLATE_EDIT_ID . '][links_delete_existing]" value="true"' . $links_delete_existing_checked . ' /> ';
+		$content.=  __( 'Delete automatic generated WordPress entries.', 'copy_monster_options' ) . '</p>';
 	
-	$content = apply_filters( 'default_blog_links_admin', $content );
+	$content = apply_filters( 'copy_monster_links_admin', $content );
 	
 	echo $content;
 	
-	do_action( 'default_blog_links_admin_bottom' );
+	do_action( 'copy_monster_links_admin_bottom' );
 	
 	restore_current_blog();
 }
-function default_blog_links_copy( $from_blog_id, $to_blog_id ){
-	global $default_blog_template;
+function copy_monster_links_copy( $from_blog_id, $to_blog_id ){
+	global $copy_monster_template;
 	
-	if( !is_array( $default_blog_template[ 'links' ] ) )
+	if( !is_array( $copy_monster_template[ 'links' ] ) )
 		return FALSE;
 	
 	// Deleting existing links
-	if( $default_blog_template[ 'links_delete_existing' ] ):
+	if( $copy_monster_template[ 'links_delete_existing' ] ):
 		switch_to_blog( $to_blog_id );
 			$args = array(
 		    	'limit' => -1
@@ -82,7 +82,7 @@ function default_blog_links_copy( $from_blog_id, $to_blog_id ){
 	endif;
 		
 	
-	$links = implode( ',', $default_blog_template[ 'links' ] );
+	$links = implode( ',', $copy_monster_template[ 'links' ] );
 	
 	$args = array(
     	'limit' => -1,
@@ -103,6 +103,6 @@ function default_blog_links_copy( $from_blog_id, $to_blog_id ){
 		
 	endforeach;
 }
-function default_blog_links_save( $input ){
+function copy_monster_links_save( $input ){
 	return $input;
 }
